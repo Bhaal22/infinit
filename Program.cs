@@ -36,12 +36,19 @@ class Program
                 Console.WriteLine($"{item.Type}: {item.Path} ({item.Size} bytes) ({item.Url})");
                 var content = await client.GetBlobContent(item.Url);
 
-                var dic = FileLetterCounter.Parse(content, letterStatistics);                
+                FileLetterCounter.Parse(content, letterStatistics);
             }
 
             foreach (var kvp in letterStatistics)
             {
                 Console.WriteLine($"Letter '{kvp.Key}': {kvp.Value} occurrences");
+            }
+
+            var sortedStatistics = letterStatistics.OrderByDescending(x => x.Value);
+            Console.WriteLine("\nSorted statistics:");
+            foreach (var kvp in sortedStatistics)
+            {
+                Console.WriteLine($"Letter '{kvp.Key}': {kvp.Value} occurrences"); 
             }
         }
         catch (Exception ex)

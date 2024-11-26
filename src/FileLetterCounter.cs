@@ -4,7 +4,7 @@ using System.Linq;
 
 public class FileLetterCounter
 {
-    public static Dictionary<char, int> Parse(string content, Dictionary<char, int> letterCounts)
+    public static void Parse(string content, Dictionary<char, int> letterCounts)
     {       
         for (int i = 0; i < content.Length; i++)
         {
@@ -18,7 +18,5 @@ public class FileLetterCounter
                 letterCounts[letter]++;
             }
         }
-
-        return letterCounts;
     }
 }
