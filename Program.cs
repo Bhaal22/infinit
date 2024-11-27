@@ -4,11 +4,7 @@ using System.Threading.Tasks;
 
 class Program
 {
-    static bool accept(string path) 
-    {
-        return Regex.Match(path, @"^lib.*\.(js|ts)$").Value != "";
-    }
-
+    
     static async Task Main(string[] args)
     {
         if (args.Length < 3)
@@ -28,28 +24,20 @@ class Program
             var tree = await client.GetRepositoryTree(owner, repo);
             Console.WriteLine($"\nRepository Tree: {tree}");
 
-            var letterStatistics = new Dictionary<char, int>();
+            var statistics = new StatisticsCollector();
             foreach (var item in tree.Tree)
             {
-                if (!Program.accept(item.Path)) continue;
+                var filter = new JsFileFilter();
+                if (!filter.Accept(item.Path)) continue;
 
                 Console.WriteLine($"{item.Type}: {item.Path} ({item.Size} bytes) ({item.Url})");
                 var content = await client.GetBlobContent(item.Url);
 
-                FileLetterCounter.Parse(content, letterStatistics);
+                statistics.ProcessContent(content);
             }
 
-            foreach (var kvp in letterStatistics)
-            {
-                Console.WriteLine($"Letter '{kvp.Key}': {kvp.Value} occurrences");
-            }
-
-            var sortedStatistics = letterStatistics.OrderByDescending(x => x.Value);
-            Console.WriteLine("\nSorted statistics:");
-            foreach (var kvp in sortedStatistics)
-            {
-                Console.WriteLine($"Letter '{kvp.Key}': {kvp.Value} occurrences"); 
-            }
+            statistics.PrintStatistics();
+            statistics.PrintSortedStatistics();
         }
         catch (Exception ex)
         {

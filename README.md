@@ -25,3 +25,19 @@ The global count algorithm is O(J*S*C + (F-J)) which make it linear in total of 
 Sorting the dictionary by Value is is O(N*log(N)) in average (N^2 in worst case). But here N is fixed size as 26 in the worst case.
 
 Globally the complexity of this algorith is linear to the total length of content to process.
+
+
+
+# Docker images
+
+```
+docker build --rm -t infinit .
+docker run --rm -e ACCESS_TOKEN=YOUR_TOKEN -e OWNER=lodash -e REPO=lodash infinit
+```
+
+Pure dev environment
+
+```
+docker build --rm -t infinit.dev -f Dockerfile.dev .
+docker run --rm -e ACCESS_TOKEN=YOUR_TOKEN -e OWNER=lodash -e REPO=lodash -v `pwd`:/app -it infinit.dev
+```
