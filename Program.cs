@@ -7,15 +7,27 @@ class Program
     
     static async Task Main(string[] args)
     {
-        if (args.Length < 3)
+        if (args.Length < 2)
         {
-            Console.WriteLine("Usage: program <access_token> <owner> <repo>");
+            Console.WriteLine("Usage: program [access_token] <owner> <repo>");
             return;
         }
 
-        string accessToken = args[0];
-        string owner = args[1]; 
-        string repo = args[2];
+        string accessToken = null;
+        string owner;
+        string repo;
+
+        if (args.Length >= 3)
+        {
+            accessToken = args[0];
+            owner = args[1];
+            repo = args[2];
+        }
+        else
+        {
+            owner = args[0];
+            repo = args[1];
+        }
 
         try
         {

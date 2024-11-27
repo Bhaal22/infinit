@@ -76,12 +76,15 @@ public class GitHubClient
     private readonly string _accessToken;
     private const string BaseUrl = "https://api.github.com";
 
-    public GitHubClient(string accessToken)
+    public GitHubClient(string accessToken = null)
     {
         _accessToken = accessToken;
         _httpClient = new HttpClient();
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+        if (!string.IsNullOrEmpty(_accessToken))
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+        }
         _httpClient.DefaultRequestHeaders.Add("X-GitHub-Api-Version", "2022-11-28");
         _httpClient.DefaultRequestHeaders.Add("User-Agent", "GitHubTreeRetriever");
     }

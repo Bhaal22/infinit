@@ -22,13 +22,15 @@ Algorithm is split is multiple api calls and different parsing stratgies
 
 The global count algorithm is O(J*S*C + (F-J)) which make it linear in total of Chars concat'd in the global buffer.
 
-Sorting the dictionary by Value is is O(N*log(N)) in average (N^2 in worst case). But here N is fixed size as 26 in the worst case.
+Sorting the dictionary by Value is O(N*log(N)) in average (N^2 in worst case). But here N is fixed size as 26 in the worst case.
 
 Globally the complexity of this algorith is linear to the total length of content to process.
 
 
 
 # Docker images
+
+To run the application ACCESS_TOKEN is optional. Mostly to be used with public repositories.
 
 ```
 docker build --rm -t infinit .
