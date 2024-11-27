@@ -20,11 +20,6 @@ public class GitHubTreeProcessor
 
     public async Task<string> GetItemContent(GitHubTreeItem item)
     {
-        if (!ShouldProcessItem(item))
-        {
-            return null;
-        }
-
         return await _client.GetBlobContent(item.Url);
     }
 
@@ -32,15 +27,19 @@ public class GitHubTreeProcessor
     {
         foreach (var item in tree.Tree)
         {
-            if (!ShouldProcessItem(item))
-            {
-                continue;
-            }
+            if (!ShouldProcessItem(item)) continue;
 
-            var content = await GetItemContent(item);
-            if (content != null)
+            try 
             {
-                statistics.ProcessContent(content);
+                var content = await GetItemContent(item);
+                if (content != null)
+                {
+                    statistics.ProcessContent(content);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
     }
