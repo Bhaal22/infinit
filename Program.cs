@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 class Program
 {
@@ -32,21 +33,14 @@ class Program
         try
         {
             var client = new GitHubClient(accessToken);
+            var filters = new List<IGitHubDataFilter> { new TreeItemFilter(), new JsFileFilter() };
+            var processor = new GitHubTreeProcessor(client, filters);
 
             var tree = await client.GetRepositoryTree(owner, repo);
             Console.WriteLine($"\nRepository Tree: {tree}");
 
             var statistics = new StatisticsCollector();
-            foreach (var item in tree.Tree)
-            {
-                var filter = new JsFileFilter();
-                if (!filter.Accept(item.Path)) continue;
-
-                Console.WriteLine($"{item.Type}: {item.Path} ({item.Size} bytes) ({item.Url})");
-                var content = await client.GetBlobContent(item.Url);
-
-                statistics.ProcessContent(content);
-            }
+            await processor.ProcessTree(tree, statistics);
 
             statistics.PrintStatistics();
             statistics.PrintSortedStatistics();

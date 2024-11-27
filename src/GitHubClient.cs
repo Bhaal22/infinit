@@ -70,7 +70,14 @@ class GitHubBlob
     public int Size { get; set; }
 }
 
-public class GitHubClient
+public interface IGitClient
+{
+    public Task<List<GitHubContent>> GetRepositoryContents(string owner, string repo, string path = "");
+    public Task<GitHubTree> GetRepositoryTree(string owner, string repo, string sha = "main");
+    public Task<string> GetBlobContent(string url);
+}
+
+public class GitHubClient: IGitClient
 {
     public HttpClient _httpClient {get; set; }
     private readonly string _accessToken;

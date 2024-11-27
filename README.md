@@ -43,3 +43,28 @@ Pure dev environment
 docker build --rm -t infinit.dev -f Dockerfile.dev .
 docker run --rm -e ACCESS_TOKEN=YOUR_TOKEN -e OWNER=lodash -e REPO=lodash -v `pwd`:/app -it infinit.dev
 ```
+
+Run the tests
+
+```
+docker build --rm -t infinit.tests -f Dockerfile.tests .
+docker run  -v `pwd`:/app -it infinit.tests
+```
+
+# Makefile
+
+```
+make build
+make build-dev
+make build-test
+
+
+make test
+OWNER=lodash REPO=lodash make run-dev
+```
+
+
+# Improvements
+
+* specify an argument on the CLI to generate the stats in a formatted output (csv, ...)
+* specify a CLI argument to dynamically add filters, parser strategies through interfaces
